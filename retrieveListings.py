@@ -303,11 +303,32 @@ def fillInDefaults(listing):
 	
 	return listing
 			
+			
+def realisticPause(result = 0, min = 0, max = 300):
+	print('realisticPause ', result)
+	d6 = random.randrange(1,7)
+	print('d6: ', d6)
+	result = result + d6
+	print('result: ',result)
+	
+	if d6 == 6:
+		result = 2 * realisticPause(result)
+	elif d6 > 3:
+		result = realisticPause(result)
+
+	if result > max:
+		return max
+	
+	if result < min:
+		return min
+		
+	return result
+
 def retrieveListing(freshListing):
 	logging.info('Retrieving listing %s', freshListing.listingID)
 	
 	newListing = scrapeListing(freshListing.url)
-	hangtime = random.randrange(1,6)
+	hangtime = realisticPause(0, 2, 31)
 	time.sleep(hangtime)
 		
 	if newListing:
@@ -339,6 +360,8 @@ def startLog(debugMode):
 	logging.info('Retrieving new listings - %s', str(time.ctime()))
 	
 def retrieve(debugMode=False, maximumListings = 3):
+	return realisticPause()
+
 	start = time.time()
 	startLog(debugMode)
 	random.seed
