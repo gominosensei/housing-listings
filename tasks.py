@@ -5,6 +5,7 @@ from trc.celery import app
 
 from listings.scrape import scraper
 from listings.discoverListings import discover
+from listings.retrieveListings import retrieve
 
 @app.task
 def add(x, y):
@@ -23,5 +24,7 @@ def xsum(numbers):
 @app.task
 def getNewListings():
 	#return scraper(False,100)
-	return discover()
-	#return "hello world"
+	#return discover(True)
+	#return 'foo'
+	return retrieve(True, 1)
+	
