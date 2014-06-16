@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from trc.celery import app
 
 from listings.scrape import scraper
+from listings.discoverListings import discover
 
 @app.task
 def add(x, y):
@@ -21,4 +22,6 @@ def xsum(numbers):
 
 @app.task
 def getNewListings():
-	return scraper(False,100)
+	#return scraper(False,100)
+	return discover(True)
+	#return "hello world"

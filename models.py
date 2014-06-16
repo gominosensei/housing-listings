@@ -8,6 +8,7 @@ class BadListing(models.Model):
 
 class FreshListing(models.Model):
 	listingID = models.BigIntegerField(primary_key=True, unique=True, editable=False)
+	url = models.CharField(max_length=254, blank=True, default='')
 	
 class Listing(models.Model):
 	# Core data about listing
