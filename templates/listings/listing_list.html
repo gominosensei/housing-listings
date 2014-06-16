@@ -1,0 +1,28 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<table class='table'>
+	<tr>
+		<th>ID</th>
+		<th>#BR</th>
+		<th>Price</th>
+		<th>Available</th>
+		<th>Address</th>
+		<th>Region</th>
+		<th>Record Updated</th>
+	</tr>
+
+	{% for listing in object_list %}
+	<tr>
+		<td><a href="listing/{{ listing.listingID }}">{{ listing.listingID }} </a></td>
+		<td>{{listing.bedroomsField}}</td>
+		<td>${{listing.price}}</td>
+		<td>{{listing.available}}</td>
+		<td>{{listing.address}}</td>
+		<td>{{listing.region}}</td>
+		<td>{{listing.dateRecordUpdated}}</td>
+	</tr>
+	{% endfor %}
+</table>		
+{% endblock %}
+

@@ -1,0 +1,36 @@
+{% extends "listings/base.html" %}
+
+<link href="http://robothijinks.com/~donnelly/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+<link href="http://robothijinks.com/~donnelly/bower_components/bootstrap/less/jumbotron.less" rel="stylesheet">
+
+{% block content %}
+<div class='row'>
+	<div class='col-md-4'> 
+		<h3>View & Edit Listings</h3>
+		<ul>
+			<li><a href='worklist'>Current worklist</a></li>
+			<li><a href='ready'>Ready to post</a></li>
+			<li><a href='deleted'>Deleted</a></li>
+			<li><a href='all'>All listings</a></li>
+		</ul>
+	</div>
+	
+	<div class='col-md-4'> 
+		<h3>Manage Vacancy List</h3>
+		<ul>
+			<li><a href='excel'>Publish all current vacancies as an Excel spreadsheet</a></li>
+			<li><a href='csv'>Publish as comma separated values</a></li>
+			<li><a href='scrapenow'>Download listings from craigslist (in foreground)</a></li>
+			<li>Download listings from craigslist (in background)</li>
+		</ul>
+		
+	</div>
+	
+	<div class='col-md-4'> 
+		<h3>Administration</h3>
+		<ul>
+		</ul>
+	</div>
+	
+</div>
+{% endblock %}

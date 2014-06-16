@@ -1,0 +1,244 @@
+{% extends "listings/base.html" %}
+{% load listing_extras %}
+
+{% block title %} 
+{% listing_title listing %}
+{% endblock %}
+
+{% block appendNavlinks %} 
+<li><a href="/hvl/worklist">Return to Worklist</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Sample listing -->
+<div class='well well-sm'>
+	<table class='table'>
+		<tr>
+			<td>#BR</td>
+			<td>Price</td>
+			<td>Contact</td>
+			<td>Description</td>
+			<td>Available</td>
+			<td>Address</td>
+			<td>Region</td>
+		</tr>
+		<tr>
+			<td>{{listing.bedroomsField}}</td>
+			<td>${{listing.price}}</td>
+			<td>{{listing.phone}}</td>
+			<td>{{listing.descriptionField}}</td>
+			<td>{{listing.available}}</td>
+			<td>{{listing.address}}</td>
+			<td>{{listing.region}}</td>
+		</tr>
+	</table>		
+</div>
+
+<form role='form form-horizontal' method="post">
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	
+	<!-- Basics, Location -->
+	<div class='row'>
+		<!-- Basics -->
+		<div class='col-md-4'> 
+			<h3>Basics</h3>
+			<div class='form-group'>
+				<div class="fieldWrapper">
+					{{ form.price.errors }}
+					<label for="id_price" class='control-label col-sm-2'>Price:</label>
+					<div class='col-sm-4'>
+						<input type='number' class='form-control' id='id_price' name='price' value={{listing.price}}>
+					</div>
+				</div>
+				<div class="fieldWrapper">
+					{{ form.bedrooms.errors }}
+					<label for="id_bedrooms" class='control-label col-sm-3'>Bedrooms:</label>
+					<div class='col-sm-3'>
+						<input type='number' class='form-control' id='id_bedrooms' name='bedrooms' value={{listing.bedrooms}}>
+					</div>
+				</div>
+			</div>
+			<div class='form-group'>
+				<div class="col-sm-6">
+					<div class="fieldWrapper checkbox">
+						<label>
+							<input type="checkbox" id='id_sublet' name='sublet' {% if listing.sublet %}checked='on'{% endif %}/> Sublet
+						</label>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="fieldWrapper checkbox">
+						<label>
+								<input type="checkbox" id='id_shared' name='shared' {% if listing.shared %}checked='on'{% endif %}/> Shared
+							</label>
+					</div>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label for='phone' class='control-label col-sm-3'>Contact</label>
+				<div class='col-sm-9 fieldWrapper'>
+					{{ form.phone.errors }}
+					<input type='phone' class='form-control' id='id_phone' name='phone' value='{{listing.phone}}'>
+				</div>
+			</div>		
+			<div class='form-group'>
+				<label for='available' class='control-label col-sm-3'>Available</label>
+				<div class='col-sm-9 fieldWrapper'>
+					{{ form.available.errors }}
+					<input type='text' class='form-control' id='id_available' name='available' value='{{listing.available}}'>
+				</div>
+			</div>			
+		</div>
+
+		<!-- Location -->
+		<div class='col-md-4'>
+			<h3>Location</h3>
+			<div class='form-group'>
+				<label for='id_address' class='control-label col-sm-3'>Address</label>
+				<div class='col-sm-9'>
+					<input type='text' class='form-control' id='id_address' name='address' value='{{listing.address}}'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label for='id_region' class='control-label col-sm-3'>Region</label>
+				<div class='col-sm-9'>
+					<input type='text' class='form-control' id='id_region' name='region' value='{{listing.region}}'>
+				</div>
+			</div>
+			{% address_display listing %}
+		</div>	
+
+		<!-- Map -->
+		<div class='col-md-4'>
+			{%if listing.mapQueryString %}
+			<iframe
+				width="400"
+				height="300"
+				frameborder="0" style="border:0"
+				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCQJ16My4P-aIymwWODzBDdyYOrcZnK9t8
+				&q={{listing.mapQueryString}}&zoom=15">  # zoom=
+			</iframe>
+			{% else %}
+			No map available
+			{% endif %}
+		</div>
+	
+	</div>
+
+	<!-- Listing -->
+	<div class='row'>
+		<div class='col-md-12'>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<a href='{{listing.url}}' target="_blank">
+							{% firstof listing.title listing.listingID %}
+						</a>
+					</h3>
+				
+				</div>
+				<div class="panel-body">
+					<div class='row'>
+						<div class='col-md-11'>
+							{{listing.listingBody}}
+						</div>
+						<div class='col-md-1'>
+							{{listing.attributeGroup|safe}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<a href="{{listing.url}}" class="btn btn-primary active" role="button">View listing</a>-->
+	</div>
+
+	<!-- Utilities, Amenities, Buttons -->
+	<div class='row'>
+
+		<!-- Utilities -->
+		<div class='col-md-3'> 
+			<h3>Utilities Include</h3>			
+		
+			<div class='form-group'>
+				{% checkbox gas listing.gas %}
+				{% checkbox heat listing.heat %}
+				{% checkbox electricity listing.electricity %}
+				{% checkbox internet listing.internet %}
+				{% checkbox cable listing.cable %}
+				{% checkbox lawn_care listing.lawn_care %}
+				{% checkbox snow_removal listing.snow_removal %}
+				{% checkbox trash listing.trash %}
+				{% checkbox water listing.water %}
+
+			</div>
+		
+		
+		</div>
+
+		<!-- Amenities -->
+		<div class='col-md-4'> 
+			<h3>Amenities</h3>
+			<div class='form-group'>
+				<label for='id_parking' class='control-label col-sm-3'>Parking</label>
+				<div class='col-sm-9'>
+					<input type='text' class='form-control' id='id_parking' name="parking" value='{{listing.parking}}'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<label for='id_laundry' class='control-label col-sm-3'>Laundry</label>
+				<div class='col-sm-9'>
+					<input type='text' class='form-control' id='id_laundry' name='laundry' value='{{listing.laundry}}'>
+				</div>
+			</div>
+	
+			<div class='form-group'>
+				<h4>Pets</h4>
+				{% checkbox catsAllowed listing.catsAllowed %}
+				{% checkbox dogsAllowed listing.dogsAllowed %}
+			</div>
+			
+			<div class='form-group'>
+				<h4>Other</h4>
+				{% checkbox noSmoking listing.noSmoking %}
+			</div>
+			
+			
+	
+	
+	
+		</div>
+	
+		<!-- Buttons -->
+		<div class='col-md-4'>
+			<p>
+				<button type="submit" value="save" name="saveStay" class="btn btn-lg btn-block btn-primary">Save</button>
+			</p>
+			<p>
+				<button type="submit" value="save" name="saveClose" class="btn btn-lg btn-block btn-primary">Save & Close</button>
+			</p>
+			<p>
+				<button type="submit" value="delete" name="deleteRecord" class="btn btn-lg btn-block btn-danger">Delete</button>
+			</p>
+			<p>
+				<button type="submit" value="rescrape" name="rescrape" class="btn btn-lg btn-block btn-caution">Download Again</button>
+			</p>
+		</div>
+	
+	</div>
+</form>
+
+<!-- Timestamps -->
+<div class="container"><small><i>
+	<ul class='list-inline'>
+		<li>Posted: {{listing.dateListingPosted}}</li>
+		<li>Listing Updated: {{listing.dateListingUpdated}}</li>
+		<li>Scraped: {{listing.dateListingScraped}}</li>
+		{% if listing.updatedBy %}
+		<li>Record Updated: {{listing.dateRecordUpdated}} by {{listing.updatedBy}}</li>
+		{% endif %}
+	</ul>
+</i></small></div>
+{% endblock %}
