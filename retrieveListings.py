@@ -360,8 +360,6 @@ def startLog(debugMode):
 	logging.info('Retrieving new listings - %s', str(time.ctime()))
 	
 def retrieve(debugMode=False, maximumListings = 3):
-	return realisticPause()
-
 	start = time.time()
 	startLog(debugMode)
 	random.seed
