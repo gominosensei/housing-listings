@@ -1,5 +1,5 @@
 from django.contrib import admin
-from listings.models import Listing, BadListing
+from listings.models import Listing, BadListing, FreshListing
 
 class ListingAdmin(admin.ModelAdmin):
     list_display = ('listingID', 'phone', 'bedrooms', 'price', 'address', 'region', 'dateListingScraped','dateRecordUpdated')
@@ -16,9 +16,12 @@ class ListingAdmin(admin.ModelAdmin):
 class BadListingAdmin(admin.ModelAdmin):
     list_display = ('listingID',)
 
-#list_filter = ['pub_date']
-#search_fields = ['question']
-	
+class FreshListingAdmin(admin.ModelAdmin):
+    list_display = ('listingID',)
+
+
 admin.site.register(Listing, ListingAdmin)
 admin.site.register(BadListing, BadListingAdmin)
+admin.site.register(FreshListing, FreshListingAdmin)
+
 

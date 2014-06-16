@@ -6,6 +6,9 @@ from django.utils import timezone
 class BadListing(models.Model):
 	listingID = models.BigIntegerField(primary_key=True, unique=True, editable=False)
 
+class FreshListing(models.Model):
+	listingID = models.BigIntegerField(primary_key=True, unique=True, editable=False)
+	
 class Listing(models.Model):
 	# Core data about listing
 	listingID = models.BigIntegerField(primary_key=True, unique=True, editable=False)
