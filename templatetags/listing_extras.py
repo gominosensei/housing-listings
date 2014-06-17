@@ -49,12 +49,14 @@ class AddressNode(template.Node):
 		
 		address_tag = '<h4>'
 		
+		line1 = ''
 		if address and neighborhood:
 			line1 = '%s (%s)' % (address, neighborhood)
 		elif address:
 			line1 = address
 		elif neighborhood:
 			line1 = neighborhood
+
 		if line1: 
 			address_tag = address_tag + line1 + '<br>'
 		

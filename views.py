@@ -182,9 +182,6 @@ class Worklist(ListView):
 class ListingUpdate(UpdateView):
 	model = Listing
 	
-	#description = 'This is just some fake text to give an idea of how much space this might take up when there is content'
-	#mapQueryString = listing.mapUrl.split('?q=')[1]
-	
 	# Require some fields that aren't required in the model
 	price = IntegerField()
 
