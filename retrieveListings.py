@@ -329,6 +329,7 @@ def retrieveListing(freshListing):
 	
 	newListing = scrapeListing(freshListing.url)
 	hangtime = realisticPause(0, 2, 31)
+	logging.info('Sleeping for %s seconds', hangtime)
 	time.sleep(hangtime)
 		
 	if newListing:
