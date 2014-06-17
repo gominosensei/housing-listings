@@ -15,6 +15,8 @@ urlpatterns = patterns('',
 	url(r'^scrapenow/$', views.scrapenow, name='scrapenow'),
 	url(r'^csv/$', views.csvview, name='csvview'),
 	url(r'^excel/$', views.excelview, name='excelview'),
+	url(r'^discover/$', views.discovernow, name='discovernow'),
+	url(r'^retrieve/$', views.retrievenow, name='retrievenow'),
 )
 
 

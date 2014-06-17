@@ -82,7 +82,7 @@ def discoverCategory(extension, pages, urlbase, deep):
 	
 		if not discoverPage(listUrl, urlbase, deep):
 			if not deep:
-				logging.info('Done with %s after %s pages', (extension, pagesback))
+				logging.info('Done with %s after %s pages' % (extension, pagesback))
 				return
 
 def startLog(debugMode):

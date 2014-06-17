@@ -65,6 +65,14 @@ def scrape(request):
 def scrapenow(request):
 	return HttpResponse(getNewListings())
 	
+def discovernow(request):
+	from listings.discoverListings import discover
+	return HttpResponse(discover())	
+		
+def retrievenow(request):
+	from listings.retrieveListings import retrieve
+	return HttpResponse(retrieve())	
+		
 def excelview(request):
 	weekago = datetime.date.today()-datetime.timedelta(days=7)
 	#queryset = Listing.objects.filter(deleted=False, updatedBy__isnull=False, dateListingUpdated__gte=weekago)
