@@ -337,7 +337,7 @@ def retrieveListing(freshListing):
 			newListing.save()
 			logging.info('  ...success')
 		else:
-			badListing = BadListing(listingID=listingID)
+			badListing = BadListing(listingID=freshListing.listingID)
 			badListing.save()
 			logging.info('  ...retrieved but not valid')
 		freshListing.delete()
