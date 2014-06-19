@@ -65,9 +65,13 @@ def scrape(request):
 def scrapenow(request):
 	return HttpResponse(getNewListings())
 	
-def discovernow(request):
+def discovernow(request, deep=False):
 	from listings.discoverListings import discover
 	return HttpResponse(discover())	
+		
+def discovernowdeep(request):
+	from listings.discoverListings import discover
+	return HttpResponse(discover(deep=True))	
 		
 def retrievenow(request):
 	from listings.retrieveListings import retrieve
