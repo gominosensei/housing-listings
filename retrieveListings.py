@@ -302,8 +302,7 @@ def fillInDefaults(listing):
 	logging.debug('cleaned up: %s', listing)
 	
 	return listing
-			
-			
+						
 def realisticPause(result = 0, min = 0, max = 300):
 	print('realisticPause ', result)
 	d6 = random.randrange(1,7)
@@ -325,6 +324,10 @@ def realisticPause(result = 0, min = 0, max = 300):
 	return result
 
 def retrieveListing(freshListing):
+	if freshListing.trouble:
+		logging.info('Not retrieving listing %s; it had trouble before', freshListing.listingID)
+		return
+
 	logging.info('Retrieving listing %s', freshListing.listingID)
 	
 	newListing = scrapeListing(freshListing.url)
