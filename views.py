@@ -58,7 +58,7 @@ def detail(request, listingID):
 	{ 'listing' : listing, 'bedrooms' : bedrooms, 'description' : description, 'mapQueryString' : mapQueryString})
 
 def status(request):
-	listingsToQuery = FreshListing.objects.count()
+	listingsToQuery = FreshListing.objects.filter(trouble=False).count()
 	total = Listing.objects.count()
 	recent = recentListings().count()
 	
@@ -86,6 +86,7 @@ def discovernowdeep(request):
 		
 def retrievenow(request):
 	from listings.retrieveListings import retrieve
+	#return HttpResponse(retrieve(True))	
 	return HttpResponse(retrieve(False, 500))	
 
 def recentListings():

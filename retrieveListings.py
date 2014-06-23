@@ -347,9 +347,8 @@ def retrieveListing(freshListing):
 		freshListing.delete()
 	else:
 		logging.warning('  Error retrieving listing %s (at %s)', (freshListing.listingID, freshListing.url))
-	
-		
-	
+		freshListing.trouble = True
+		freshListing.save()
 
 def startLog(debugMode):
 	logfile = 'debug.log'
@@ -368,7 +367,11 @@ def retrieve(debugMode=False, maximumListings = 3):
 	startLog(debugMode)
 	random.seed
 
-	#return 'bar'
+	#freshListing = FreshListing.objects.get(pk='4531086344')
+	#retrieveListing(freshListing)
+	#return('ok')
+	
+	
 	querySet = FreshListing.objects.all()[:maximumListings]
 	listingCount = querySet.count()
 	
