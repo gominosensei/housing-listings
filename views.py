@@ -75,7 +75,7 @@ def discovernowdeep(request):
 		
 def retrievenow(request):
 	from listings.retrieveListings import retrieve
-	return HttpResponse(retrieve())	
+	return HttpResponse(retrieve(maximumListings=25))	
 		
 def excelview(request):
 	weekago = datetime.date.today()-datetime.timedelta(days=7)

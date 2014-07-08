@@ -24,7 +24,7 @@ def xsum(numbers):
 @app.task
 def getNewListings():
 	#return scraper(False,100)
-	#return discover(True)
+	#return discover()
 	#return 'foo'
-	return retrieve(True, 1)
+	return retrieve(False, 500)
 	
