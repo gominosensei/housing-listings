@@ -146,8 +146,9 @@ def scrapeListing(url, soup=None):
 	try:
 		price = postingtitle.split()[0]
 		price = price.split('$')[1]
+		price = price.split('/m')[0]
 		newListing.price = int(price)
-	except IndexError:
+	except (IndexError, ValueError):
 		logging.warning('Non-$ price %s,', newListing.price)
 		#newListing.price='' 
 
