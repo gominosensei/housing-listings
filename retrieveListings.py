@@ -366,7 +366,7 @@ def retrieve(debugMode=False, maximumListings = 3):
 	random.seed
 
 	#return 'bar'
-	querySet = FreshListing.objects.all()[:maximumListings]
+	querySet = FreshListing.objects.all().order_by('-pk')[:maximumListings]
 	listingCount = querySet.count()
 	
 	IDs=''
