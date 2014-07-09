@@ -372,9 +372,10 @@ def retrieve(modifier, debugMode=False, maximumListings = 3):
 		maximumListings = 1
 
 	if modifier == "end": 
-		querySet = FreshListing.objects.all()[:maximumListings]
+		maximumListings = maximumListings / 2 + 1
+		querySet = FreshListing.objects.exclude(trouble=True)[:maximumListings]
 	else:
-		querySet = FreshListing.objects.all().order_by('-pk')[:maximumListings]
+		querySet = FreshListing.objects.exclude(trouble=True).order_by('-pk')[:maximumListings]
 	listingCount = querySet.count()
 	
 	IDs=''
