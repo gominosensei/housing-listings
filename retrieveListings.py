@@ -380,8 +380,10 @@ def retrieve(modifier, debugMode=False, maximumListings = 3):
 	IDs=''
 	for freshListing in querySet:
 		if modifier == "odd" and freshListing.pk % 2 == 0:
+			listingCount = listingCount - 1
 			continue
 		if modifier == "even" and freshListing.pk % 2 == 1:
+			listingCount = listingCount - 1
 			continue
 		retrieveListing(freshListing)
 
