@@ -17,7 +17,7 @@ class BadListingAdmin(admin.ModelAdmin):
     list_display = ('listingID',)
 
 class FreshListingAdmin(admin.ModelAdmin):
-    list_display = ('listingID', 'url', )
+    list_display = ('listingID', 'url', 'trouble', )
 
 
 admin.site.register(Listing, ListingAdmin)

@@ -4,6 +4,7 @@ from listings import views
 
 urlpatterns = patterns('',
 	url(r'^$', views.index),
+	url(r'^status/$', views.status, name='status'),
 	url(r'^login/$', views.login_user, name='login_user'),
 	url(r'^logout/$', views.logout_user, name='logout_user'),
 	url(r'^all/$', views.AllListings.as_view(), name='all'),

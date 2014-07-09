@@ -146,8 +146,9 @@ def scrapeListing(url, soup=None):
 	try:
 		price = postingtitle.split()[0]
 		price = price.split('$')[1]
+		price = price.split('/m')[0]
 		newListing.price = int(price)
-	except IndexError:
+	except (IndexError, ValueError):
 		logging.warning('Non-$ price %s,', newListing.price)
 		#newListing.price='' 
 
@@ -302,8 +303,7 @@ def fillInDefaults(listing):
 	logging.debug('cleaned up: %s', listing)
 	
 	return listing
-			
-			
+						
 def realisticPause(result = 0, min = 0, max = 300):
 	print('realisticPause ', result)
 	d6 = random.randrange(1,7)
@@ -325,6 +325,10 @@ def realisticPause(result = 0, min = 0, max = 300):
 	return result
 
 def retrieveListing(freshListing):
+	if freshListing.trouble:
+		logging.info('Not retrieving listing %s; it had trouble before', freshListing.listingID)
+		return
+
 	logging.info('Retrieving listing %s', freshListing.listingID)
 	
 	newListing = scrapeListing(freshListing.url)
@@ -344,9 +348,8 @@ def retrieveListing(freshListing):
 		freshListing.delete()
 	else:
 		logging.warning('  Error retrieving listing %s (at %s)', (freshListing.listingID, freshListing.url))
-	
-		
-	
+		freshListing.trouble = True
+		freshListing.save()
 
 def startLog(debugMode):
 	logfile = 'debug.log'
@@ -365,7 +368,6 @@ def retrieve(debugMode=False, maximumListings = 3):
 	startLog(debugMode)
 	random.seed
 
-	#return 'bar'
 	querySet = FreshListing.objects.all().order_by('-pk')[:maximumListings]
 	listingCount = querySet.count()
 	

@@ -16,7 +16,7 @@ from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 
 
-from listings.models import Listing  
+from listings.models import Listing, FreshListing  
 from listings.scrape import scrapeListing, scraper, startLog
 from listings.tasks import add, getNewListings
 
@@ -57,6 +57,17 @@ def detail(request, listingID):
 	return render_to_response('listings/index.html', 
 	{ 'listing' : listing, 'bedrooms' : bedrooms, 'description' : description, 'mapQueryString' : mapQueryString})
 
+def status(request):
+	listingsToQuery = FreshListing.objects.filter(trouble=False).count()
+	total = Listing.objects.count()
+	recent = recentListings().count()
+	
+	report = []
+	report.append('Listings in database: %s' % str(total))
+	report.append('Listings included in HVL : %s' % str(recent))
+	report.append('Listings to query: %s' % str(listingsToQuery))
+	return HttpResponse('<br>'.join(report))
+	
 def scrape(request):
 	return HttpResponse(getNewListings.delay())
 	#return HttpResponse(getNewListings.apply_async((), queue='lopri', countdown=1))
@@ -76,7 +87,12 @@ def discovernowdeep(request):
 def retrievenow(request):
 	from listings.retrieveListings import retrieve
 	return HttpResponse(retrieve(maximumListings=25))	
-		
+
+def recentListings():
+	weekago = datetime.date.today()-datetime.timedelta(days=7)
+	queryset = Listing.objects.filter(deleted=False, dateListingUpdated__gte=weekago)
+	return queryset
+	
 def excelview(request):
 	weekago = datetime.date.today()-datetime.timedelta(days=7)
 	#queryset = Listing.objects.filter(deleted=False, updatedBy__isnull=False, dateListingUpdated__gte=weekago)
