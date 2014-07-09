@@ -84,9 +84,9 @@ def discovernowdeep(request):
 	from listings.discoverListings import discover
 	return HttpResponse(discover(deep=True))	
 		
-def retrievenow(request):
+def retrievenow(request, modifier):
 	from listings.retrieveListings import retrieve
-	return HttpResponse(retrieve(maximumListings=25))	
+	return HttpResponse(retrieve(maximumListings=25,modifier=modifier))	
 
 def recentListings():
 	weekago = datetime.date.today()-datetime.timedelta(days=7)

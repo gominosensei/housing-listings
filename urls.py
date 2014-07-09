@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 	url(r'^excel/$', views.excelview, name='excelview'),
 	url(r'^discover/$', views.discovernow, name='discovernow'),
 	url(r'^discover/deep/$', views.discovernowdeep, name='discovernowdeep'),
-	url(r'^retrieve/$', views.retrievenow, name='retrievenow'),
+	url(r'^retrieve/(?P<modifier>\w*)$', views.retrievenow, name='retrievenow'),
 )
 
 

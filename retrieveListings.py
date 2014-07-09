@@ -363,16 +363,26 @@ def startLog(debugMode):
 	logging.info('===================================')
 	logging.info('Retrieving new listings - %s', str(time.ctime()))
 	
-def retrieve(debugMode=False, maximumListings = 3):
+def retrieve(modifier, debugMode=False, maximumListings = 3):
 	start = time.time()
 	startLog(debugMode)
 	random.seed
+	
+	if modifier == "one":
+		maximumListings = 1
 
-	querySet = FreshListing.objects.all().order_by('-pk')[:maximumListings]
+	if modifier == "end": 
+		querySet = FreshListing.objects.all()[:maximumListings]
+	else:
+		querySet = FreshListing.objects.all().order_by('-pk')[:maximumListings]
 	listingCount = querySet.count()
 	
 	IDs=''
 	for freshListing in querySet:
+		if modifier == "odd" and freshListing.pk % 2 == 0:
+			continue
+		if modifier == "even" and freshListing.pk % 2 == 1:
+			continue
 		retrieveListing(freshListing)
 
 	end = time.time()
