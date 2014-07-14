@@ -324,7 +324,7 @@ def realisticPause(result = 0, min = 0, max = 300):
 		
 	return result
 
-def retrieveListing(freshListing):
+def retrieveListing(freshListing, slow):
 	if freshListing.trouble:
 		logging.info('Not retrieving listing %s; it had trouble before', freshListing.listingID)
 		return
@@ -333,6 +333,8 @@ def retrieveListing(freshListing):
 	
 	newListing = scrapeListing(freshListing.url)
 	hangtime = realisticPause(0, 2, 31)
+	if slow:
+		hangtime = hangtime * 10
 	logging.info('Sleeping for %s seconds', hangtime)
 	time.sleep(hangtime)
 		
@@ -363,7 +365,7 @@ def startLog(debugMode):
 	logging.info('===================================')
 	logging.info('Retrieving new listings - %s', str(time.ctime()))
 	
-def retrieve(modifier, debugMode=False, maximumListings = 3):
+def retrieve(modifier, debugMode=False, maximumListings = 3, slow=False):
 	start = time.time()
 	startLog(debugMode)
 	random.seed
@@ -386,7 +388,7 @@ def retrieve(modifier, debugMode=False, maximumListings = 3):
 		if modifier == "even" and freshListing.pk % 2 == 1:
 			listingCount = listingCount - 1
 			continue
-		retrieveListing(freshListing)
+		retrieveListing(freshListing, slow)
 
 	end = time.time()
 	results = 'HVL done - %s listings in %s seconds' % (listingCount, end-start)
