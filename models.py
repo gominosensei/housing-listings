@@ -11,6 +11,7 @@ class FreshListing(models.Model):
 	url = models.CharField(max_length=254, blank=True, default='')
 	trouble = models.BooleanField(default=False)
 	dateRecordUpdated = models.DateTimeField(auto_now=True)
+	claimed = models.DateTimeField(blank=True, null=True)
 	
 class Listing(models.Model):
 	# Core data about listing

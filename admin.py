@@ -16,8 +16,14 @@ class ListingAdmin(admin.ModelAdmin):
 class BadListingAdmin(admin.ModelAdmin):
     list_display = ('listingID',)
 
+def markTrouble(modeladmin, request, queryset):
+    queryset.update(trouble=True)
+markTrouble.short_description = "Mark selected listings as trouble"
+
 class FreshListingAdmin(admin.ModelAdmin):
     list_display = ('listingID', 'url', 'dateRecordUpdated', 'trouble', )
+    ordering = ['-listingID']
+    actions = [markTrouble]
 
 
 admin.site.register(Listing, ListingAdmin)

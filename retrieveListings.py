@@ -373,21 +373,32 @@ def retrieve(modifier, debugMode=False, maximumListings = 3, slow=False):
 	if modifier == "one":
 		maximumListings = 1
 
+	baseQuerySet = FreshListing.objects.exclude(trouble=True).order_by('-pk')
+	
 	if modifier == "end": 
 		maximumListings = maximumListings / 2 + 1
 		querySet = FreshListing.objects.exclude(trouble=True)[:maximumListings]
+		
+	if modifier == "odd":
+		querySet = baseQuerySet.exclude(pk__endswith='2').exclude(pk__endswith='4').exclude(pk__endswith='6').exclude(pk__endswith='8').exclude(pk__endswith='0')[:maximumListings]
+		
+	if modifier == "even":
+		querySet = baseQuerySet.exclude(pk__endswith='1').exclude(pk__endswith='3').exclude(pk__endswith='5').exclude(pk__endswith='7').exclude(pk__endswith='9')[:maximumListings]
+		
 	else:
-		querySet = FreshListing.objects.exclude(trouble=True).order_by('-pk')[:maximumListings]
+		querySet = baseQuerySet[:maximumListings]
+		
 	listingCount = querySet.count()
 	
 	IDs=''
+	
 	for freshListing in querySet:
-		if modifier == "odd" and freshListing.pk % 2 == 0:
-			listingCount = listingCount - 1
-			continue
-		if modifier == "even" and freshListing.pk % 2 == 1:
-			listingCount = listingCount - 1
-			continue
+		#if modifier == "odd" and freshListing.pk % 2 == 0:
+		#	listingCount = listingCount - 1
+		#	continue
+		#if modifier == "even" and freshListing.pk % 2 == 1:
+		#	listingCount = listingCount - 1
+		#	continue
 		retrieveListing(freshListing, slow)
 
 	end = time.time()
