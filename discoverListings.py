@@ -32,14 +32,18 @@ def discoverListing(row, urlbase):
 		logging.info('  ...already scraped')
 		return False
 		
-	if recordExists(listingID, FreshListing):
+	try:
+		freshListing = ""
+		freshListing = FreshListing.objects.get(pk=listingID)	
+		freshListing.save(force_update=True)		
 		logging.info('  ...already queued')
-		return  False
+		return False
+	except:
+		freshListing = FreshListing(listingID=listingID)
+		freshListing.url = url
+		freshListing.save()
+		logging.info('  ...queued up')
 		
-	freshListing = FreshListing(listingID=listingID)
-	freshListing.url = url
-	freshListing.save()
-	logging.info('  ...queued up')
 	return True
 
 
