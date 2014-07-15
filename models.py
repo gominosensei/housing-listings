@@ -10,6 +10,7 @@ class FreshListing(models.Model):
 	listingID = models.BigIntegerField(primary_key=True, unique=True, editable=False)
 	url = models.CharField(max_length=254, blank=True, default='')
 	trouble = models.BooleanField(default=False)
+	dateRecordUpdated = models.DateTimeField(auto_now=True)
 	
 class Listing(models.Model):
 	# Core data about listing
