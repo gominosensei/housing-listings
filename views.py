@@ -78,7 +78,7 @@ def scrapenow(request):
 	
 def discovernow(request, deep=False):
 	from listings.discoverListings import discover
-	return HttpResponse(discover())	
+	return HttpResponse(discover(pagesPerCategory = 8))	
 		
 def discovernowdeep(request):
 	from listings.discoverListings import discover
@@ -86,7 +86,7 @@ def discovernowdeep(request):
 		
 def retrievenow(request, modifier):
 	from listings.retrieveListings import retrieve
-	return HttpResponse(retrieve(maximumListings=25,modifier=modifier,slow=False))	
+	return HttpResponse(retrieve(maximumListings=10,debugMode=True,modifier=modifier,slow=True))	
 
 def recentListings():
 	weekago = datetime.date.today()-datetime.timedelta(days=7)
