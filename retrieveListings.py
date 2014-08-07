@@ -167,30 +167,7 @@ def scrapeListing(url, soup=None):
 	except AttributeError:
 		pass
 
-	# Contact phone number
-	try:
-		replylink = url.replace(extension, 'reply').replace('.html','')
-		replypage = str(urllib.request.urlopen(replylink).read())
-		newListing.phone = findPhone(replypage, True)
-	except:
-		logging.debug('No phone from reply page')
-		try:
-			newListing.phone = findPhone(postingbody)
-		except AttributeError:
-			pass
 
-	if not newListing.phone:
-		try:
-			contactlink = url.replace(extension,'fb/mad/'+extension).replace('.html','')
-			logging.debug('contactlink: ' + contactlink)
-			contactpage = str(urllib.request.urlopen(contactlink).read())
-			logging.debug('contactpage: ' + contactpage)
-			newListing.phone = findPhone(contactpage, False)
-			logging.debug('phone: ' + newListing.phone)
-		except:
-			logging.debug('No phone from contact page')
-			newListing.phone = ''
-			
 	# Posting date
 	postinginfos = soup.find('div','postinginfos')
 	logging.debug('postinginfos: %s', postinginfos)
@@ -251,6 +228,33 @@ def scrapeListing(url, soup=None):
 	newListing.region = regionByZip(newListing)
 		
 	newListing.dateListingScraped = timezone.now()
+	
+	# Contact phone number
+	try:
+		newListing.phone = findPhone(postingbody)
+	except AttributeError:
+		logging.debug('No phone in posting, trying reply page')
+	
+	if not newListing.phone:
+		try:
+			replylink = url.replace(extension, 'reply').replace('.html','')
+			replypage = str(urllib.request.urlopen(replylink).read())
+			newListing.phone = findPhone(replypage, True)
+		except:
+			logging.debug('No phone from reply page')
+
+	if not newListing.phone:
+		try:
+			contactlink = url.replace(extension,'fb/mad/'+extension).replace('.html','')
+			logging.debug('contactlink: ' + contactlink)
+			contactpage = str(urllib.request.urlopen(contactlink).read())
+			logging.debug('contactpage: ' + contactpage)
+			newListing.phone = findPhone(contactpage, False)
+			logging.debug('phone: ' + newListing.phone)
+		except:
+			logging.debug('No phone from contact page')
+			newListing.phone = ''
+			
 		
 	logging.debug('newListing (at the end) %s', newListing)
 	return newListing
@@ -393,12 +397,6 @@ def retrieve(modifier, debugMode=False, maximumListings = 3, slow=False):
 	IDs=''
 	
 	for freshListing in querySet:
-		#if modifier == "odd" and freshListing.pk % 2 == 0:
-		#	listingCount = listingCount - 1
-		#	continue
-		#if modifier == "even" and freshListing.pk % 2 == 1:
-		#	listingCount = listingCount - 1
-		#	continue
 		retrieveListing(freshListing, slow)
 
 	end = time.time()
