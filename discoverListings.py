@@ -101,7 +101,7 @@ def startLog(debugMode):
 	logging.info('===================================')
 	logging.info('Discovering new listings', str(time.ctime()))
 	
-def discover(debugMode=False, pagesPerCategory = 20, deep = False):
+def discover(debugMode=False, pagesPerCategory = 5, deep = False):
 	# Constants
 	urlbase = 'http://madison.craigslist.org'
 	extension = ['apa', 'roo', 'sub']

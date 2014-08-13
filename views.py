@@ -78,7 +78,7 @@ def scrapenow(request):
 	
 def discovernow(request, deep=False):
 	from listings.discoverListings import discover
-	return HttpResponse(discover(pagesPerCategory = 8))	
+	return HttpResponse(discover(pagesPerCategory = 3))	
 		
 def discovernowdeep(request):
 	from listings.discoverListings import discover
