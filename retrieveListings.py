@@ -369,7 +369,7 @@ def startLog(debugMode):
 	logging.info('===================================')
 	logging.info('Retrieving new listings - %s', str(time.ctime()))
 	
-def retrieve(modifier, debugMode=False, maximumListings = 3, slow=False):
+def retrieve(modifier, debugMode = False, maximumListings = 3, slow = False, offset = 0):
 	start = time.time()
 	startLog(debugMode)
 	random.seed
@@ -381,16 +381,20 @@ def retrieve(modifier, debugMode=False, maximumListings = 3, slow=False):
 	
 	if modifier == "end": 
 		maximumListings = maximumListings / 2 + 1
-		querySet = FreshListing.objects.exclude(trouble=True)[:maximumListings]
+		querySet = FreshListing.objects.exclude(trouble=True)
 		
 	if modifier == "odd":
-		querySet = baseQuerySet.exclude(pk__endswith='2').exclude(pk__endswith='4').exclude(pk__endswith='6').exclude(pk__endswith='8').exclude(pk__endswith='0')[:maximumListings]
+		querySet = baseQuerySet.exclude(pk__endswith='2').exclude(pk__endswith='4').exclude(pk__endswith='6').exclude(pk__endswith='8').exclude(pk__endswith='0')
 		
 	if modifier == "even":
-		querySet = baseQuerySet.exclude(pk__endswith='1').exclude(pk__endswith='3').exclude(pk__endswith='5').exclude(pk__endswith='7').exclude(pk__endswith='9')[:maximumListings]
+		querySet = baseQuerySet.exclude(pk__endswith='1').exclude(pk__endswith='3').exclude(pk__endswith='5').exclude(pk__endswith='7').exclude(pk__endswith='9')
 		
 	else:
-		querySet = baseQuerySet[:maximumListings]
+		querySet = baseQuerySet
+		
+	rangeStart = int(offset) 
+	rangeEnd = int(offset) + maximumListings
+	querySet = querySet[rangeStart:rangeEnd]
 		
 	listingCount = querySet.count()
 	
