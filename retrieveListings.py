@@ -237,23 +237,18 @@ def scrapeListing(url, soup=None):
 	
 	if not newListing.phone:
 		try:
-			replylink = url.replace(extension, 'reply').replace('.html','')
-			replypage = str(urllib.request.urlopen(replylink).read())
-			newListing.phone = findPhone(replypage, True)
+			replylink = soup.find('span','replylink').find('a')['href']
+			if replylink:
+				baseurl = url.split(extension)[0]
+				replypage = str(urllib.request.urlopen(baseurl + replylink).read())
+				newListing.phone = findPhone(replypage, True)
+			else:
+				logging.debug('No reply link on page')
 		except:
 			logging.debug('No phone from reply page')
 
 	if not newListing.phone:
-		try:
-			contactlink = url.replace(extension,'fb/mad/'+extension).replace('.html','')
-			logging.debug('contactlink: ' + contactlink)
-			contactpage = str(urllib.request.urlopen(contactlink).read())
-			logging.debug('contactpage: ' + contactpage)
-			newListing.phone = findPhone(contactpage, False)
-			logging.debug('phone: ' + newListing.phone)
-		except:
-			logging.debug('No phone from contact page')
-			newListing.phone = ''
+		newListing.phone = ''
 			
 		
 	logging.debug('newListing (at the end) %s', newListing)
