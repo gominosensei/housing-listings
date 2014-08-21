@@ -323,10 +323,36 @@ def realisticPause(result = 0, min = 0, max = 300):
 		
 	return result
 
+def recordExists(listingID, database):
+	try:
+		listing = database.objects.get(pk=listingID)
+		return True
+	except database.DoesNotExist:
+		return False
+
 def retrieveListing(freshListing, slow):
 	if freshListing.trouble:
 		logging.info('Not retrieving listing %s; it had trouble before', freshListing.listingID)
 		return
+
+	if recordExists(freshListing.listingID, Listing):
+		logging.info('Already retrieved')
+		return
+
+	if recordExists(freshListing.listingID, BadListing):
+		logging.info('Already retrieved (and bad)')
+		return
+
+	try:
+		updatedFreshListing = FreshListing.objects.get(pk=freshListing.listingID)
+		if updatedFreshListing.trouble:
+			logging.info('Not retrieving listing %s; it had trouble before', freshListing.listingID)
+			return
+	except database.DoesNotExist:
+		logging.info('Listing does not exist anywhere any more')
+		return
+	
+		
 
 	logging.info('Retrieving listing %s', freshListing.listingID)
 	
