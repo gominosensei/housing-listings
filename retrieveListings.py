@@ -356,12 +356,11 @@ def retrieveListing(freshListing, slow):
 
 	logging.info('Retrieving listing %s', freshListing.listingID)
 	
-	newListing = scrapeListing(freshListing.url)
-	hangtime = realisticPause(0, 2, 31)
-	if slow:
-		hangtime = hangtime * 10
-	logging.info('Sleeping for %s seconds', hangtime)
-	time.sleep(hangtime)
+	newListing = ''
+	try:
+		newListing = scrapeListing(freshListing.url)
+	except:
+		pass	# check below whether it worked
 		
 	if newListing:
 		if validListing(newListing, True):
@@ -377,6 +376,14 @@ def retrieveListing(freshListing, slow):
 		logging.warning('  Error retrieving listing %s (at %s)', (freshListing.listingID, freshListing.url))
 		freshListing.trouble = True
 		freshListing.save()
+		
+	hangtime = realisticPause(0, 2, 31)
+	if slow:
+		hangtime = hangtime * 10
+	logging.info('Sleeping for %s seconds', hangtime)
+	time.sleep(hangtime)
+		
+
 
 def startLog(debugMode):
 	logfile = 'debug.log'
