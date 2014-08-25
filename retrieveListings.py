@@ -125,7 +125,6 @@ def scrapeListing(url, soup=None):
 	logging.info('Scraping listing %s', listingID)
 	
 	newListing = Listing(listingID=listingID)
-	logging.debug('newListing %s', newListing)
 	
 	# Retrieve page and extract contents 
 	try:
@@ -138,7 +137,7 @@ def scrapeListing(url, soup=None):
 		logging.error('Failed to parse listing %s', url)
 		self = None
 		return
-
+		
 	newListing.listingBody = postingbody
 	newListing.title = postingtitle
 
@@ -359,6 +358,8 @@ def retrieveListing(freshListing, slow):
 	newListing = ''
 	try:
 		newListing = scrapeListing(freshListing.url)
+	except urllib.error.HTTPError:
+		raise
 	except:
 		pass	# check below whether it worked
 		
@@ -373,7 +374,7 @@ def retrieveListing(freshListing, slow):
 			logging.info('  ...retrieved but not valid')
 		freshListing.delete()
 	else:
-		logging.warning('  Error retrieving listing %s (at %s)', (freshListing.listingID, freshListing.url))
+		logging.warning('  Error retrieving listing %s (at %s)' % (freshListing.listingID, freshListing.url))
 		freshListing.trouble = True
 		freshListing.save()
 		
